@@ -68,9 +68,13 @@ useEffect(() => {
   }, []);
 
     return <div className="w-full">
-        <pre>{transcript}</pre>
-        <pre>{response}</pre>
-        <button onClick={startRecording} className="bg-blue-500 text-white p-2 rounded">Start Recording</button>
-        <button onClick={stopRecording} className="bg-red-500 text-white p-2 rounded ml-2">Stop Recording</button>
+        <div className="pb-20">
+            <pre>{"User:" + transcript}</pre>
+            <pre>{"Agent:" + response}</pre>
+        </div>
+        <div className="fixed bottom-4 left-4 right-4 flex justify-center gap-2">
+            <button onClick={startRecording} className="bg-blue-500 text-white p-2 rounded">Start Recording</button>
+            <button onClick={stopRecording} className="bg-red-500 text-white p-2 rounded">Stop Recording</button>
+        </div>
     </div>
 }
