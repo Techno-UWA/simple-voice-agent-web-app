@@ -1,6 +1,10 @@
 # simple-voice-agent-web-app
 Test of mic and speaker access on websites and on conversion of a nextjs website into a web app with mic an speaker capabilities and also of voice agent on the web app
 
+THIS MUST BE OPENED ON A CHROMIUM BROWSER as it relies on the webkit web speech api for transcription which is only available on certain browsers like Google Chrome
+
+This is a test project so may be left in only a pseudo complete state
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -17,7 +21,9 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your CHROMIUM based browser to see the result.
+
+THIS MUST BE OPENED ON A CHROMIUM BROWSER as it relies on the webkit web speech api for transcription which is only available on certain browsers like Google Chrome
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
