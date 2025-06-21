@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Simple Voice Agent",
   description: "A simple voice agent web app",
   manifest: "/manifest.json",
+};
+
+export const viewport = {
   themeColor: "#1976d2",
 };
 
