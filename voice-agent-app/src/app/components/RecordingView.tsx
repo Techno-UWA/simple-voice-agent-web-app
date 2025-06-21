@@ -4,8 +4,37 @@ import {useRef, useState, useEffect} from "react";
 
 declare global {
     interface Window {
-        webkitSpeechRecognition: any;
+        webkitSpeechRecognition: new () => SpeechRecognition;
     }
+}
+
+interface SpeechRecognition extends EventTarget {
+    continuous: boolean;
+    interimResults: boolean;
+    onstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+    onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    start(): void;
+    stop(): void;
+}
+
+interface SpeechRecognitionEvent extends Event {
+    results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+    [index: number]: SpeechRecognitionResult;
+    length: number;
+}
+
+interface SpeechRecognitionResult {
+    [index: number]: SpeechRecognitionAlternative;
+    length: number;
+}
+
+interface SpeechRecognitionAlternative {
+    transcript: string;
+    confidence: number;
 }
 
 export default function RecordingView() {
@@ -13,7 +42,7 @@ export default function RecordingView() {
     const [transcript, setTranscript] = useState<string>("");
     const [response, setResponse] = useState<string>("");
 
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
     
     const sendToGroq = async (text: string) => {
         const res = await fetch('/api/groq', {
@@ -26,7 +55,11 @@ export default function RecordingView() {
     };
     
     const startRecording = () => {
-        
+        // Check if we're on the client side and if webkitSpeechRecognition is available
+        if (typeof window === 'undefined' || !window.webkitSpeechRecognition) {
+            console.error('Speech recognition not available');
+            return;
+        }
 
         recognitionRef.current = new window.webkitSpeechRecognition();
         recognitionRef.current.continuous = true;
@@ -36,7 +69,7 @@ export default function RecordingView() {
             console.log("Recording started");
         }   
 
-        recognitionRef.current.onresult = (event: any) => {
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
             const {transcript} = event.results[event.results.length - 1][0];
             setTranscript(transcript);
             sendToGroq(transcript);
@@ -46,9 +79,8 @@ export default function RecordingView() {
             console.log("Recording ended");
         }
 
-    recognitionRef.current.start();
-
-};    
+        recognitionRef.current.start();
+    };    
 
 
 const stopRecording = () => {
